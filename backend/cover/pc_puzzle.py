@@ -216,6 +216,10 @@ def create_pc_puzzle(work_dir: Path, output_dir: Path, main_color: Optional[str]
                 processed_images.append(img)
 
             total_content_height = sum(img.height for img in processed_images) + SPACING * (len(processed_images) - 1)
+        # 创建背景
+        # main_color = None: 使用默认背景（back.jpg）
+        # main_color = "": 自动提取主色调
+        # main_color = "#ffffff": 使用纯色背景
         bg = create_background((canvas_width, canvas_height), main_color, source_img)
 
         # 计算居中位置（水平居中，垂直居中）

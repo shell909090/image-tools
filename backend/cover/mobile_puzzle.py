@@ -174,7 +174,10 @@ def create_mobile_puzzle(work_dir: Path, output_dir: Path, main_color: Optional[
                 mobile_desktop = add_shadow_and_rounded_corners(mobile_desktop)
                 total_content_width = mobile_lock.width + mobile_desktop.width + SPACING
 
-        # 创建背景（使用原始图片提取主色调）
+        # 创建背景
+        # main_color = None: 使用默认背景（back.jpg）
+        # main_color = "": 自动提取主色调
+        # main_color = "#ffffff": 使用纯色背景
         original_mobile_lock = Image.open(mobile_lock_file)
         bg = create_background((canvas_width, canvas_height), main_color, original_mobile_lock)
 
