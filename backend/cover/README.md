@@ -94,6 +94,9 @@ backend/
 └── cover/
     ├── back.jpg                # 默认底图
     ├── mobile-block-cover.png  # Mobile 覆盖图
+    ├── pad-block-cover.png     # Pad 覆盖图
+    ├── pad-lock-cover.png     # Pad 锁定覆盖图
+    ├── pc-mac-cover.png        # PC Mac 覆盖图
     ├── imgs/                    # 图片根目录
     │   └── example/            # 示例图片目录（实际为具体项目目录）
     │       ├── mobile-desktop.png
@@ -150,22 +153,22 @@ backend/
    **b) Pad 图片预处理**
    - 检查当前目录下是否存在 `pad-desktop.png` 和 `pad-lock.png`
    - 若 `pad-desktop.png` 不存在，执行以下操作：
-     - 将 `/imgs/pad-block-cover.png` 和 `pad.png` 做重合处理
-     - `pad.png` 作为底图，`mobile-block-cover.png` 覆盖在底图上
+     - 将 `pad-block-cover.png` 和 `pad.png` 做重合处理
+     - `pad.png` 作为底图，`pad-block-cover.png` 覆盖在底图上
      - 两张图片都是 4:3 比例
      - 生成的新图保存为 `pad-desktop.png`
    - 若 `pad-lock.png` 不存在，执行以下操作：
-     - 将 `/imgs/pad-lock-cover.png` 和 `pad.png` 做重合处理
-     - `pad.png` 作为底图，`/imgs/pad-lock-cover.png` 覆盖在底图上
+     - 将 `pad-lock-cover.png` 和 `pad.png` 做重合处理
+     - `pad.png` 作为底图，`pad-lock-cover.png` 覆盖在底图上
      - 两张图片都是 4:3 比例
      - 生成的新图保存为 `pad-lock.png`
 
    **c) PC 图片预处理**
    - 检查当前目录下是否存在 `pc-desktop-mac.png`
    - 若不存在，执行以下操作：
-     - 将 `/imgs/pc-mac-cover.png` 和 `pc.png` 做重合处理
-     - `pc.png` 作为底图，`/imgs/pc-mac-cover.png` 覆盖在底图上
-     - 两张图片都是 21:9 比例
+     - 将 `pc-mac-cover.png` 和 `pc.png` 做重合处理
+     - `pc.png` 作为底图，`pc-mac-cover.png` 覆盖在底图上
+     - 两张图片都是 16:9 比例
      - 生成的新图保存为 `pc-desktop-mac.png`
 
 3. **背景处理**
@@ -187,7 +190,7 @@ backend/
    - 纵向排列两张图片
    - 图片之间留有间隔
    - 每张图片独立添加边框阴影和圆角效果
-   - **原始图片比例**：输入图片为 21:9 比例（像素尺寸可能有差异，但比例不变）
+   - **原始图片比例**：输入图片为 16:9 比例（像素尺寸可能有差异，但比例不变）
    - **最终结果**：3:4 比例，大小不超过 2MB
    - **特殊情况**：如果只存在其中一张图片，则将该图居中显示
 
@@ -215,7 +218,7 @@ backend/
    - 计算合适的图片尺寸和间距
    - **输入图片比例**（原始图片保持各自比例）：
      - Mobile 拼图输入：9:19
-     - PC 拼图输入：21:9
+     - PC 拼图输入：16:9
      - Pad 拼图输入：4:3
    - **输出图片比例**：所有拼图结果统一为 3:4 比例
    - 处理不同尺寸的输入图片（可能需要缩放和适配）

@@ -17,9 +17,9 @@ logger = logging.getLogger(__name__)
 # 常量定义
 BACK_IMAGE = Path(__file__).parent / 'back.jpg'
 MOBILE_BLOCK_COVER = Path(__file__).parent / 'mobile-block-cover.png'
-PAD_BLOCK_COVER = Path(__file__).parent / 'imgs' / 'pad-block-cover.png'
-PAD_LOCK_COVER = Path(__file__).parent / 'imgs' / 'pad-lock-cover.png'
-PC_MAC_COVER = Path(__file__).parent / 'imgs' / 'pc-mac-cover.png'
+PAD_BLOCK_COVER = Path(__file__).parent / 'pad-block-cover.png'
+PAD_LOCK_COVER = Path(__file__).parent / 'pad-lock-cover.png'
+PC_MAC_COVER = Path(__file__).parent / 'pc-mac-cover.png'
 
 # 输出图片配置
 OUTPUT_RATIO = (3, 4)  # 3:4 比例
