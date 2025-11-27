@@ -7,7 +7,7 @@
 
 scripts/env.sh
 
-backend/cover/imgs/
+backend/*/imgs/
 *.pyc
 
 .specstory/
