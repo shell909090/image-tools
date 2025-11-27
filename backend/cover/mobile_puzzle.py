@@ -21,7 +21,8 @@ try:
         resize_to_fit_ratio,
         create_background,
         get_image_file,
-        save_optimized_image
+        save_optimized_image,
+        save_optimized_jpeg
     )
 except ImportError:
     from utils import (
@@ -33,7 +34,8 @@ except ImportError:
         resize_to_fit_ratio,
         create_background,
         get_image_file,
-        save_optimized_image
+        save_optimized_image,
+        save_optimized_jpeg
     )
 
 logger = logging.getLogger(__name__)
@@ -357,17 +359,9 @@ def create_mobile_puzzle_2(work_dir: Path, output_dir: Path, main_color: Optiona
         bg.paste(mobile_lock, (x_offset, y_offset), mobile_lock)
         bg.paste(mobile_desktop_2, (x_offset + mobile_lock.width + SPACING, y_offset), mobile_desktop_2)
 
-        # 保存为 JPG 格式
+        # 保存为 JPG 格式（压缩到 500KB 以内）
         output_file = output_dir / 'mobile-combined-2.jpg'
-        
-        # 如果背景有透明通道，需要转换为 RGB
-        if bg.mode == 'RGBA':
-            bg_rgb = Image.new('RGB', bg.size, (255, 255, 255))
-            bg_rgb.paste(bg, mask=bg.split()[3])
-            bg = bg_rgb
-        
-        # 保存为 JPEG 格式
-        bg.save(output_file, 'JPEG', quality=95, optimize=True)
+        save_optimized_jpeg(bg, output_file)
         logger.info(f"  已生成 mobile-combined-2.jpg")
         return True
     except Exception as e:
@@ -533,17 +527,9 @@ def create_mobile_puzzle_3(work_dir: Path, output_dir: Path, main_color: Optiona
         bg.paste(mobile_lock, (x_offset, y_offset), mobile_lock)
         bg.paste(mobile_desktop_3, (x_offset + mobile_lock.width + SPACING, y_offset), mobile_desktop_3)
 
-        # 保存为 JPG 格式
+        # 保存为 JPG 格式（压缩到 500KB 以内）
         output_file = output_dir / 'mobile-combined-3.jpg'
-        
-        # 如果背景有透明通道，需要转换为 RGB
-        if bg.mode == 'RGBA':
-            bg_rgb = Image.new('RGB', bg.size, (255, 255, 255))
-            bg_rgb.paste(bg, mask=bg.split()[3])
-            bg = bg_rgb
-        
-        # 保存为 JPEG 格式
-        bg.save(output_file, 'JPEG', quality=95, optimize=True)
+        save_optimized_jpeg(bg, output_file)
         logger.info(f"  已生成 mobile-combined-3.jpg")
         return True
     except Exception as e:

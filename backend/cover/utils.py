@@ -24,6 +24,7 @@ PC_MAC_COVER = Path(__file__).parent / 'pc-mac-cover.png'
 # 输出图片配置
 OUTPUT_RATIO = (1, 1)  # 1:1 比例
 MAX_FILE_SIZE = 2 * 1024 * 1024  # 2MB
+MAX_JPEG_SIZE = 500 * 1024  # 500KB（用于最终输出的 JPG 文件）
 BORDER_RADIUS = 25  # 圆角半径（从20增加到25）
 SHADOW_OFFSET = (5, 5)
 SHADOW_BLUR = 10
@@ -346,3 +347,59 @@ def save_optimized_image(image: Image.Image, output_file: Path, quality: int = 9
             image.save(output_file_jpg, 'JPEG', quality=75, optimize=True)
             file_size = output_file_jpg.stat().st_size
             logger.info(f"  已缩小尺寸并保存为 JPEG，大小: {file_size / 1024 / 1024:.2f}MB")
+
+
+def save_optimized_jpeg(image: Image.Image, output_file: Path, max_size: int = MAX_JPEG_SIZE, quality: int = 95) -> None:
+    """
+    保存 JPEG 图片并优化文件大小，确保不超过指定大小（默认 500KB）
+
+    Args:
+        image: 图片对象
+        output_file: 输出文件路径
+        max_size: 最大文件大小（字节），默认 500KB
+        quality: 初始质量（用于 JPEG）
+    """
+    # 确保图片是 RGB 模式（JPEG 不支持透明通道）
+    if image.mode == 'RGBA':
+        bg = Image.new('RGB', image.size, (255, 255, 255))
+        bg.paste(image, mask=image.split()[3])
+        image = bg
+    elif image.mode != 'RGB':
+        image = image.convert('RGB')
+
+    # 逐步降低质量直到文件大小符合要求
+    current_quality = quality
+    while current_quality > 30:
+        image.save(output_file, 'JPEG', quality=current_quality, optimize=True)
+        file_size = output_file.stat().st_size
+
+        if file_size <= max_size:
+            logger.info(f"  已保存 JPEG，质量: {current_quality}，大小: {file_size / 1024:.2f}KB")
+            return
+
+        current_quality -= 5
+
+    # 如果质量降到 30 还是太大，需要缩小尺寸
+    file_size = output_file.stat().st_size
+    if file_size > max_size:
+        # 计算缩放比例
+        scale = (max_size / file_size) ** 0.5
+        new_size = (int(image.width * scale), int(image.height * scale))
+        image = image.resize(new_size, Image.Resampling.LANCZOS)
+        
+        # 重新尝试保存，从较低质量开始
+        current_quality = 75
+        while current_quality > 30:
+            image.save(output_file, 'JPEG', quality=current_quality, optimize=True)
+            file_size = output_file.stat().st_size
+            
+            if file_size <= max_size:
+                logger.info(f"  已缩小尺寸并保存为 JPEG，质量: {current_quality}，大小: {file_size / 1024:.2f}KB")
+                return
+            
+            current_quality -= 5
+        
+        # 如果还是太大，使用最低质量
+        image.save(output_file, 'JPEG', quality=30, optimize=True)
+        file_size = output_file.stat().st_size
+        logger.info(f"  已缩小尺寸并保存为 JPEG（最低质量），大小: {file_size / 1024:.2f}KB")
